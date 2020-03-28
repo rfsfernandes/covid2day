@@ -1,0 +1,16 @@
+<resources>
+  <string name="app_name">Covid2Day</string>
+  <string name="title_home">Home</string>
+  <string name="title_dashboard">Dashboard</string>
+  <string name="title_notifications">Notifications</string>
+
+  <string name="ok" translatable="false">OK</string>
+
+  <string name="splash_popup_title">Something went wrong</string>
+  <string name="splash_popup_message">We apologize, but our services are having a rough time
+    right now.\n\nPlease, try again later!\n\n<b>The application will close now.</b></string>
+  <string name="welcome">Welcome!</string>
+  <string name="start_typing_here">Start typing here...</string>
+  <string name="country_field">To find the data for the country you want, please enter the country in the field below.</string>
+
+</resources>
