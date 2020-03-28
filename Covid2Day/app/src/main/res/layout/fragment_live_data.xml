@@ -65,6 +65,7 @@
           android:padding="15dp"
           android:textColor="#FFFFFF"
           android:textColorHint="#ffffff"
+          android:textCursorDrawable="@null"
           android:textSize="14sp"
           app:layout_constraintBottom_toBottomOf="parent"
           app:layout_constraintEnd_toEndOf="@+id/textView2"
@@ -174,7 +175,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Number of Cases:" />
+                android:text="@string/number_of_cases" />
 
             <TextView
                 android:id="@+id/textViewCases"
@@ -197,7 +198,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Cases Today:" />
+                android:text="@string/cases_today" />
 
             <TextView
                 android:id="@+id/textViewCasesToday"
@@ -220,7 +221,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Overall Deaths:" />
+                android:text="@string/overall_deaths" />
 
             <TextView
                 android:id="@+id/textViewOverallDeaths"
@@ -243,7 +244,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Deaths Today:" />
+                android:text="@string/deaths_today" />
 
             <TextView
                 android:id="@+id/textViewDeathsToday"
@@ -266,7 +267,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Recovered:" />
+                android:text="@string/recovered" />
 
             <TextView
                 android:id="@+id/textViewRecovered"
@@ -289,7 +290,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Active Cases:" />
+                android:text="@string/active_cases" />
 
             <TextView
                 android:id="@+id/textViewActiveCases"
@@ -312,7 +313,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Critical Cases:" />
+                android:text="@string/critical_cases" />
 
             <TextView
                 android:id="@+id/textViewCriticalCases"
@@ -335,7 +336,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Cases per Million:" />
+                android:text="@string/cases_per_million" />
 
             <TextView
                 android:id="@+id/textViewCasesPerMillion"
@@ -358,7 +359,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Deaths per Million:" />
+                android:text="@string/deaths_per_million" />
 
             <TextView
                 android:id="@+id/textViewDeathsPerMillion"
@@ -374,4 +375,19 @@
     </androidx.cardview.widget.CardView>
 
   </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+  <ProgressBar
+      android:id="@+id/progressBar"
+      style="?android:attr/progressBarStyle"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:background="@null"
+      android:elevation="14dp"
+      android:indeterminate="true"
+      android:progressTint="@color/colorPrimary"
+      android:visibility="invisible"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

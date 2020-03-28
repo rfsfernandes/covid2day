@@ -9,6 +9,7 @@ import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
+import pt.covidtwoday.custom.CovidTwoDayApp;
 import pt.covidtwoday.data.Repository;
 import pt.covidtwoday.data.RequestCallBack;
 import pt.covidtwoday.model.CountryData;
@@ -17,6 +18,7 @@ public class SplashScreenViewModel extends AndroidViewModel {
 
   private final Context mContext;
   private Repository mRepository;
+  private CovidTwoDayApp mApp;
 
   public MutableLiveData<List<String>> contryListMutableLiveData = new MutableLiveData<>();
   public MutableLiveData<String> errorMutableLiveData = new MutableLiveData<>();
@@ -30,6 +32,7 @@ public class SplashScreenViewModel extends AndroidViewModel {
 
   public SplashScreenViewModel(@NonNull Application application) {
     super(application);
+    mApp = (CovidTwoDayApp) application;
     this.mContext = application.getApplicationContext();
     mRepository = Repository.getInstance(application);
   }
@@ -38,6 +41,7 @@ public class SplashScreenViewModel extends AndroidViewModel {
     mRepository.getAllCountries(new RequestCallBack<List<CountryData>>() {
       @Override
       public void responseSuccessful(List<CountryData> responseObject) {
+        mApp.setCountryDataList(responseObject);
         List<String> tempCountry = new ArrayList<>();
         for (CountryData countryData : responseObject) {
           if (countryData.getCases() > 0){

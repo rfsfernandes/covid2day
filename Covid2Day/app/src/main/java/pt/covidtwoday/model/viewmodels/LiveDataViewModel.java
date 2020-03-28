@@ -12,7 +12,7 @@ import pt.covidtwoday.data.Repository;
 import pt.covidtwoday.data.RequestCallBack;
 import pt.covidtwoday.model.CountryData;
 
-public class HomeViewModel extends AndroidViewModel {
+public class LiveDataViewModel extends AndroidViewModel {
   private final Context mContext;
   private final Repository mRepository;
 
@@ -26,7 +26,7 @@ public class HomeViewModel extends AndroidViewModel {
    * @param application
    */
 
-  public HomeViewModel(@NonNull Application application) {
+  public LiveDataViewModel(@NonNull Application application) {
     super(application);
     this.mContext = application.getApplicationContext();
     this.mRepository = Repository.getInstance(application);

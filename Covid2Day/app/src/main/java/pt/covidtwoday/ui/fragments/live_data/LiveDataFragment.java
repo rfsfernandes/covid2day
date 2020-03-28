@@ -1,7 +1,7 @@
-package pt.covidtwoday.ui.fragments.home;
+package pt.covidtwoday.ui.fragments.live_data;
 
 import android.app.Activity;
-import android.net.Uri;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -10,11 +10,11 @@ import android.view.ViewGroup;
 
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -25,6 +25,7 @@ import java.util.Objects;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.cardview.widget.CardView;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
@@ -32,17 +33,14 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import butterknife.OnEditorAction;
-import butterknife.OnItemClick;
 import butterknife.Unbinder;
 import pt.covidtwoday.R;
 import pt.covidtwoday.custom.CovidTwoDayApp;
 import pt.covidtwoday.model.CountryData;
-import pt.covidtwoday.model.viewmodels.HomeViewModel;
-import pt.covidtwoday.model.viewmodels.SplashScreenViewModel;
+import pt.covidtwoday.model.viewmodels.LiveDataViewModel;
 
-public class HomeFragment extends Fragment {
+public class LiveDataFragment extends Fragment {
 
   //  Place ViewBinding here
   @BindView(R.id.autoCompleteTextView)
@@ -51,7 +49,8 @@ public class HomeFragment extends Fragment {
   CardView cardViewSheet;
   @BindView(R.id.coordinatorLayoutSheet)
   CoordinatorLayout coordinatorLayoutSheet;
-
+  @BindView(R.id.progressBar)
+  ProgressBar progressBar;
   @BindView(R.id.textViewCases)
   TextView textViewCases;
   @BindView(R.id.textViewCasesToday)
@@ -75,26 +74,29 @@ public class HomeFragment extends Fragment {
   @BindView(R.id.imageViewCountryFlag)
   ImageView imageViewCountryFlag;
 
+
   //  Place static constants here
 
   //  Place constants here
 
   //  Place viarables here
-  private HomeViewModel homeViewModel;
-  private SplashScreenViewModel mSplashScreenViewModel;
+  private LiveDataViewModel mLiveDataViewModel;
+
   private Unbinder mUnbinder;
   private BottomSheetBehavior behavior;
 
   public View onCreateView(@NonNull LayoutInflater inflater,
                            ViewGroup container, Bundle savedInstanceState) {
-    homeViewModel =
-        ViewModelProviders.of(Objects.requireNonNull(getActivity())).get(HomeViewModel.class);
-    mSplashScreenViewModel = ViewModelProviders.of(getActivity()).get(SplashScreenViewModel.class);
-    View root = inflater.inflate(R.layout.fragment_home, container, false);
+    mLiveDataViewModel =
+        ViewModelProviders.of(Objects.requireNonNull(getActivity())).get(LiveDataViewModel.class);
+
+    View root = inflater.inflate(R.layout.fragment_live_data, container, false);
     mUnbinder = ButterKnife.bind(this, root);
     behavior = BottomSheetBehavior.from(cardViewSheet);
     behavior.setHideable(true);
     behavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+    progressBar.getIndeterminateDrawable().setColorFilter(getResources().getColor(R.color.colorPrimary, null),
+        PorterDuff.Mode.MULTIPLY);
     return root;
   }
 
@@ -109,34 +111,43 @@ public class HomeFragment extends Fragment {
 
     mAutoCompleteTextView.setAdapter(adapter);
 
-    mAutoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-      @Override
-      public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-        performSearch(mAutoCompleteTextView.getText().toString());
-      }
-    });
+    mAutoCompleteTextView.setOnItemClickListener((adapterView, view1, i, l) -> performSearch(mAutoCompleteTextView.getText().toString()));
 
     initViewModel();
   }
 
   private void initViewModel(){
-    homeViewModel.mCountryDataMutableLiveData.observe(Objects.requireNonNull(getActivity()), this::showBottomSheet);
+    mLiveDataViewModel.mCountryDataMutableLiveData.observe(Objects.requireNonNull(getActivity()), this::showBottomSheet);
+
+    mLiveDataViewModel.errorLiveData.observe(getActivity(), errorMessage -> {
+      handleProgress(false);
+      new AlertDialog.Builder(getActivity())
+          .setTitle(getResources().getString(R.string.splash_popup_title))
+          .setMessage(getResources().getString(R.string.splash_popup_message))
+          .setPositiveButton(getResources().getString(R.string.ok), (dialogInterface, i) -> dialogInterface.dismiss())
+          .create().show();
+    });
+
   }
 
   private void showBottomSheet(CountryData countryData) {
-    Glide.with(Objects.requireNonNull(getActivity())).load(countryData.getCountryInfo().getFlag()).into(imageViewCountryFlag);
-    textViewCountryName.setText(countryData.getCountry());
-    textViewActiveCases.setText(String.valueOf(countryData.getActive()));
-    textViewCases.setText(String.valueOf(countryData.getCases()));
-    textViewCasesToday.setText(String.valueOf(countryData.getTodayCases()));
-    textViewOverallDeaths.setText(String.valueOf(countryData.getDeaths()));
-    textViewRecovered.setText(String.valueOf(countryData.getRecovered()));
-    textViewCasesPerMillion.setText(String.valueOf(countryData.getCasesPerOneMillion()));
-    textViewDeathsPerMillion.setText(String.valueOf(countryData.getDeathsPerOneMillion()));
-    textViewDeathsToday.setText(String.valueOf(countryData.getTodayDeaths()));
-    textViewCriticalCases.setText(String.valueOf(countryData.getCritical()));
-    mAutoCompleteTextView.clearFocus();
-    behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+    if(getContext() != null){
+      Glide.with(getContext()).load(countryData.getCountryInfo().getFlag()).into(imageViewCountryFlag);
+      textViewCountryName.setText(countryData.getCountry());
+      textViewActiveCases.setText(String.valueOf(countryData.getActive()));
+      textViewCases.setText(String.valueOf(countryData.getCases()));
+      textViewCasesToday.setText(String.valueOf(countryData.getTodayCases()));
+      textViewOverallDeaths.setText(String.valueOf(countryData.getDeaths()));
+      textViewRecovered.setText(String.valueOf(countryData.getRecovered()));
+      textViewCasesPerMillion.setText(String.valueOf(countryData.getCasesPerOneMillion()));
+      textViewDeathsPerMillion.setText(String.valueOf(countryData.getDeathsPerOneMillion()));
+      textViewDeathsToday.setText(String.valueOf(countryData.getTodayDeaths()));
+      textViewCriticalCases.setText(String.valueOf(countryData.getCritical()));
+      mAutoCompleteTextView.clearFocus();
+      handleProgress(false);
+      behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+    }
+
   }
 
   public static void hideKeyboard(Activity activity) {
@@ -158,10 +169,14 @@ public class HomeFragment extends Fragment {
     behavior.setState(BottomSheetBehavior.STATE_HIDDEN);
   }
 
+
   @Override
   public void onDestroy() {
     super.onDestroy();
-    mUnbinder.unbind();
+    if(mUnbinder != null){
+      mUnbinder.unbind();
+    }
+
   }
 
   @OnEditorAction(R.id.autoCompleteTextView)
@@ -175,7 +190,13 @@ public class HomeFragment extends Fragment {
 
   private void performSearch(String country){
     hideKeyboard(Objects.requireNonNull(getActivity()));
-    homeViewModel.getCountryData(country);
+    handleProgress(true);
+    mLiveDataViewModel.getCountryData(country);
+  }
+
+  private void handleProgress(boolean show){
+    progressBar.setIndeterminate(show);
+    progressBar.setVisibility(show ? View.VISIBLE : View.INVISIBLE);
   }
 
 }

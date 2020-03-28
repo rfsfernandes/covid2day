@@ -3,23 +3,23 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/navigation_home">
+    app:startDestination="@+id/navigation_live_data">
 
   <fragment
-      android:id="@+id/navigation_home"
-      android:name="pt.covidtwoday.ui.fragments.home.HomeFragment"
-      android:label="@string/title_home"
-      tools:layout="@layout/fragment_home" />
+      android:id="@+id/navigation_live_data"
+      android:name="pt.covidtwoday.ui.fragments.live_data.LiveDataFragment"
+      android:label="@string/title_live_data"
+      tools:layout="@layout/fragment_live_data" />
 
   <fragment
-      android:id="@+id/navigation_dashboard"
-      android:name="pt.covidtwoday.ui.fragments.dashboard.DashboardFragment"
-      android:label="@string/title_dashboard"
-      tools:layout="@layout/fragment_dashboard" />
+      android:id="@+id/navigation_map"
+      android:name="pt.covidtwoday.ui.fragments.map.MapFragment"
+      android:label="@string/title_map"
+      tools:layout="@layout/fragment_map" />
 
   <fragment
-      android:id="@+id/navigation_notifications"
-      android:name="pt.covidtwoday.ui.fragments.notifications.NotificationsFragment"
-      android:label="@string/title_notifications"
-      tools:layout="@layout/fragment_notifications" />
+      android:id="@+id/navigation_history"
+      android:name="pt.covidtwoday.ui.fragments.history.HistoryFragment"
+      android:label="@string/title_history"
+      tools:layout="@layout/fragment_history" />
 </navigation>
