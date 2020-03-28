@@ -36,7 +36,12 @@ public class HomeViewModel extends AndroidViewModel {
     mRepository.getNumbersFromCountry(country, new RequestCallBack<CountryData>() {
       @Override
       public void responseSuccessful(CountryData responseObject) {
-        mCountryDataMutableLiveData.setValue(responseObject);
+        if(responseObject != null){
+          mCountryDataMutableLiveData.setValue(responseObject);
+        }else{
+          errorLiveData.setValue("error");
+        }
+
       }
 
       @Override
