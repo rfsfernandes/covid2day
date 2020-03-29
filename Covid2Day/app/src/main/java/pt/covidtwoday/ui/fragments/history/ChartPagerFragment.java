@@ -57,14 +57,6 @@ public class ChartPagerFragment extends Fragment {
   }
 
   @Override
-  public void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    if (getArguments() != null) {
-
-    }
-  }
-
-  @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
                            Bundle savedInstanceState) {
     // Inflate the layout for this fragment
@@ -150,9 +142,9 @@ public class ChartPagerFragment extends Fragment {
   }
 
   @Override
-  public void onDetach() {
-    super.onDetach();
-
+  public void onDestroy() {
+    super.onDestroy();
+    mUnbinder.unbind();
   }
 
   private void handleProgress(boolean show){

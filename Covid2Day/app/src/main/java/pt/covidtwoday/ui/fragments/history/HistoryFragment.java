@@ -92,7 +92,7 @@ public class HistoryFragment extends Fragment {
 
       mHistoryViewModel.mCountryHistoryMutableLiveData.observe(getViewLifecycleOwner(),
           countryHistory -> {
-            
+
           });
 
 
