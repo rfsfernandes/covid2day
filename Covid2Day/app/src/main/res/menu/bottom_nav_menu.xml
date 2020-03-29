@@ -3,17 +3,21 @@
 
   <item
       android:id="@+id/navigation_live_data"
-      android:icon="@drawable/ic_home_black_24dp"
+      android:icon="@drawable/ic_virus_24dp"
       android:title="@string/title_live_data" />
 
   <item
       android:id="@+id/navigation_map"
-      android:icon="@drawable/ic_location_on_black_24dp"
+      android:icon="@drawable/ic_coronavirus_icon"
       android:title="@string/title_map" />
 
   <item
       android:id="@+id/navigation_history"
-      android:icon="@drawable/ic_history_black_24dp"
+      android:icon="@drawable/ic_coronavirus"
       android:title="@string/title_history" />
+  <item
+      android:id="@+id/navigation_info"
+      android:icon="@drawable/ic_informacao"
+      android:title="@string/title_informations" />
 
 </menu>

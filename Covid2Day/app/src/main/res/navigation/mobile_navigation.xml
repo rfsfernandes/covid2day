@@ -22,4 +22,9 @@
       android:name="pt.covidtwoday.ui.fragments.history.HistoryFragment"
       android:label="@string/title_history"
       tools:layout="@layout/fragment_history" />
+  <fragment
+      android:id="@+id/navigation_info"
+      android:name="pt.covidtwoday.ui.fragments.informations.InformationsFragment"
+      android:label="@string/title_informations"
+      tools:layout="@layout/fragment_informations" />
 </navigation>

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="cancel" >cancelar</string>
+  <string name="app_name">Covid2Day</string>
+  <string name="active_cases">Casos Activos</string>
+  <string name="cases">Casos:</string>
+  <string name="cases_per_million">Casos por milhão:</string>
+  <string name="cases_percentage">Casos %:</string>
+  <string name="cases_today">Casos Novos:</string>
+  <string name="charts">Gráficos</string>
+  <string name="country_field">Para encontrar os dados do país que você deseja, insira o nome do país no campo abaixo.</string>
+  <string name="country_field_history">Para encontrar os dados históricos do país que você deseja, insira o nome do país no campo abaixo.</string>
+  <string name="critical_cases">Casos críticos:</string>
+  <string name="deaths">Mortes:</string>
+  <string name="deaths_per_million">Mortes por milhão:</string>
+  <string name="deaths_percentage">Mortes %:</string>
+  <string name="deaths_today">Mortes Novas:</string>
+  <string name="evoluction_of_cases_and_deaths">Evolução do número de casos e do número de mortes</string>
+  <string name="evolution_of_cases_and_deaths_percentage">Evolução do número de casos e do número de mortes, em percentagem</string>
+  <string name="list">Lista</string>
+  <string name="number_of_cases">Número de casos:</string>
+  <string name="overall_deaths">Número de mortes:</string>
+  <string name="recovered">Recuperados</string>
+  <string name="splash_popup_message">Pedimos desculpa, mas os nossos serviços estão a passar por um mau bocado neste momento. Por favor, tente de novo mais tarde!  <b>A aplicação vai fechar agora.</b></string>
+  <string name="splash_popup_title">Algo correu mal</string>
+  <string name="start_typing_here">Comece a escrever aqui…</string>
+  <string name="stay_home">Fique em casa</string>
+  <string name="title_activity_maps">Mapa</string>
+  <string name="title_history">Histórico</string>
+  <string name="title_informations">Informações</string>
+  <string name="title_live_data">Dados Actuais</string>
+  <string name="title_map">Mapa</string>
+  <string name="welcome">Bem-vindo!</string>
+  <string name="world_data">Dados Mundiais</string>
+
+
+  <string
+      name="icon_made"><![CDATA[Alguns icons foram feitos por: <br> <b><a href="https://www.flaticon.com/br/autores/nhor-phai">Nhor Phai</a></b> <br>
+      e <br> <b><a href="https://www.flaticon.com/br/autores/freepik">Freepik</a></b> <br>
+      do site  <b><a href="https://www.flaticon.com">www.flaticon.com</a></b>
+<p>Vejam o trabalho deles e dêem-lhes algum amor!!</p>]]></string>
+
+  <string
+      name="app_info"><![CDATA[
+      <p>Esta aplicação foi feita <br> para ajudar as pessoas a seguir <br> os números do Novo Coranavirus, <br>como por exemplo: Casos, Mortes, etc…</p>
+  <br>
+  <p>Se tem alguma ideia para adicionar a esta aplicação, ou se encontrou um <i>bug</i>,<br> por favor contacte  <br><b><a
+  href="mailto:covidtwoday@gmail.com">Equipa Covid2Day</a></b> <br>com as suas ideias!! <b> Você será ouvido!</b></p>]]></string>
+
+  <string name="developer_info"><![CDATA[
+      <p>O icon e o logo da aplicação foram feitos pela:<br> <b><a href="https://www.instagram.com/marta.louzeiro/">Marta Louzeiro</a></b> <br> Dêem-lhe algum amor pela excelente <i>ArtWork</i>!</p>
+      <p>Esta aplicação foi desenvolvida por:<br> <b>Rodrigo Fernandes</b></p>
+      <p>Eu sou um aluno de Engenharia informática a tentar fazer algo pela vida!<br>Este é o meu primeiro trabalho sozinho!</p>
+<p>Se tiver trabalho para mim, por favor contacte-me pelo email presente no GooglePlay!</p>
+]]></string>
+
+  <string name="appeal"><![CDATA[ A equipa do <b><a
+  href="mailto:covidtwoday@gmail.com">Covid2Day</a></b> implora para que fique em casa! Vamos ultrapassar esta situação se <b>TODOS</B> cumprirmos o nosso <b>cívico</b> de ficar em casa! Não seja egoísta. As pessoas estão a morrer! E cada vez mais todos os dias!<br> Obrigado.]]></string>
+  <string name="ad_closed">Parece que fechou o anúncio…</string>
+  <string name="ad_closed_message">Pedimos desculpa. Parece que fechou o anúncio… Esta aplicação necessita que você a apoie ao ver alguns anúncios de vez em quando, para que possamos manter alguns serviços como o GoogleMaps!\\nPode-nos ajudar, por favor?</string>
+  <string name="no_ads_message">Desculpe. Parece que não há anúncios de momento! Pode proceder!</string>
+  <string name="no_ads_title">Sem anúncios para mostrar</string>
+
+</resources>

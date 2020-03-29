@@ -7,10 +7,12 @@ import androidx.navigation.Navigation;
 import butterknife.Unbinder;
 import pt.covidtwoday.R;
 import pt.covidtwoday.custom.CovidTwoDayApp;
+import pt.covidtwoday.custom.utils.UtilsClass;
 import pt.covidtwoday.model.viewmodels.SplashScreenViewModel;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
 
@@ -24,13 +26,27 @@ public class SplashScreenActivity extends AppCompatActivity {
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
+    int nightModeFlags =
+        getResources().getConfiguration().uiMode &
+            Configuration.UI_MODE_NIGHT_MASK;
+
+    switch (nightModeFlags) {
+      case Configuration.UI_MODE_NIGHT_YES:
+        UtilsClass.getInstance().setStatusBarDark(this, false);
+        break;
+      case Configuration.UI_MODE_NIGHT_NO:
+        UtilsClass.getInstance().setStatusBarDark(this, true);
+        break;
+
+    }
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_splash_screen);
     mSplashScreenViewModel = ViewModelProviders.of(this).get(SplashScreenViewModel.class);
     initViewModel();
   }
 
-  public void initViewModel(){
+  public void initViewModel() {
+
     mSplashScreenViewModel.contryListMutableLiveData.observe(this, stringList -> {
       canGoToMain = true;
 
@@ -40,7 +56,7 @@ public class SplashScreenActivity extends AppCompatActivity {
       new Handler().postDelayed(new Runnable() {
         @Override
         public void run() {
-          if(canGoToMain){
+          if (canGoToMain) {
             startActivity(new Intent(SplashScreenActivity.this, MainActivity.class));
             finish();
           }
@@ -52,7 +68,7 @@ public class SplashScreenActivity extends AppCompatActivity {
     mSplashScreenViewModel.errorMutableLiveData.observe(this, error -> {
       canGoToMain = false;
       counter++;
-      if(counter == 10){
+      if (counter == 10) {
         new AlertDialog.Builder(this)
             .setTitle(getResources().getString(R.string.splash_popup_title))
             .setMessage(getResources().getString(R.string.splash_popup_message))
@@ -63,7 +79,7 @@ public class SplashScreenActivity extends AppCompatActivity {
 
             })
             .create().show();
-      }else{
+      } else {
         mSplashScreenViewModel.getAllCountriesWithCases();
       }
     });
@@ -73,6 +89,8 @@ public class SplashScreenActivity extends AppCompatActivity {
   protected void onResume() {
     super.onResume();
     mSplashScreenViewModel.getAllCountriesWithCases();
+//    startActivity(new Intent(this, AdsRewardedActivity.class));
+
 
   }
 

@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
+import com.anychart.AnyChartView;
 import com.anychart.chart.common.dataentry.DataEntry;
 import com.anychart.chart.common.dataentry.ValueDataEntry;
 
@@ -21,6 +22,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import androidx.fragment.app.FragmentManager;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -29,12 +31,17 @@ import pt.covidtwoday.model.CountryHistory;
 import pt.covidtwoday.ui.fragments.charts.ChartsFragment;
 
 
-public class ChartPagerFragment extends Fragment {
+public class ChartPagerFragment extends Fragment implements AnyChartView.OnRenderedListener {
 
   @BindView(R.id.progressBarHistory)
   ProgressBar progressBarHistory;
 
   private CountryHistory countryHistory;
+  private FragmentManager mFragmentManager;
+  private AnyChartView.OnRenderedListener mOnRenderedListener;
+
+
+
 
   private Unbinder mUnbinder;
 
@@ -42,17 +49,25 @@ public class ChartPagerFragment extends Fragment {
     // Required empty public constructor
   }
 
-  public CountryHistory getCountryHistory() {
-    return countryHistory;
-  }
 
   public void setCountryHistory(CountryHistory countryHistory) {
     this.countryHistory = countryHistory;
   }
 
-  public static ChartPagerFragment newInstance(CountryHistory countryHistory) {
+  public void setFragmentManager(FragmentManager fragmentManager) {
+    mFragmentManager = fragmentManager;
+  }
+
+  public void setOnRenderedListener(AnyChartView.OnRenderedListener onRenderedListener) {
+    mOnRenderedListener = onRenderedListener;
+  }
+  public static ChartPagerFragment newInstance(FragmentManager fragmentManager,
+                                               CountryHistory countryHistory,
+                                               AnyChartView.OnRenderedListener onRenderedListener) {
     ChartPagerFragment fragment = new ChartPagerFragment();
     fragment.setCountryHistory(countryHistory);
+    fragment.setFragmentManager(fragmentManager);
+    fragment.setOnRenderedListener(onRenderedListener);
     return fragment;
   }
 
@@ -124,13 +139,15 @@ public class ChartPagerFragment extends Fragment {
             getActivity().runOnUiThread(new Runnable() {
               @Override
               public void run() {
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frameLayoutChartsCases,
-                    ChartsFragment.getInstance(dataEntries, ChartsFragment.TYPE.CASES)).commit();
+                mFragmentManager.beginTransaction().replace(R.id.frameLayoutChartsCases,
+                    ChartsFragment.getInstance(ChartPagerFragment.this,dataEntries, ChartsFragment.TYPE.CASES)).commit();
 
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frameLayoutChartsPercentages,
-                    ChartsFragment.getInstance(dataEntriesPercentages, ChartsFragment.TYPE.PERCENTAGES)).commit();
+                mFragmentManager.beginTransaction().replace(R.id.frameLayoutChartsPercentages,
+                    ChartsFragment.getInstance(ChartPagerFragment.this,
+                        dataEntriesPercentages, ChartsFragment.TYPE.PERCENTAGES)).commit();
 
                 handleProgress(false);
+
               }
             });
           }
@@ -148,8 +165,22 @@ public class ChartPagerFragment extends Fragment {
   }
 
   private void handleProgress(boolean show){
-    progressBarHistory.setIndeterminate(show);
-    progressBarHistory.setVisibility(show ? View.VISIBLE : View.INVISIBLE);
+    if(progressBarHistory != null){
+      progressBarHistory.setIndeterminate(show);
+      progressBarHistory.setVisibility(show ? View.VISIBLE : View.INVISIBLE);
+    }
+
+  }
+
+  int counter = 0;
+
+  @Override
+  public void onRendered() {
+    counter++;
+
+    if(counter == 2){
+      mOnRenderedListener.onRendered();
+    }
   }
 
   private class CustomEntry extends ValueDataEntry {
@@ -158,7 +189,7 @@ public class ChartPagerFragment extends Fragment {
       super(x, cases);
       setValue("death", death);
       setValue("cases", cases);
-//      setValue(x,death);
+
     }
   }
 

@@ -5,13 +5,18 @@
   <string name="title_history">History</string>
 
   <string name="ok" translatable="false">OK</string>
+  <string name="cancel" >Cancel</string>
+
+  <string name="add_app_id" translatable="false">ca-app-pub-5556364700570622~2395701389</string>
+  <string name="reward_ad" translatable="false">ca-app-pub-5556364700570622/5953966151</string>
+  <string name="interstitial_ad" translatable="false">ca-app-pub-5556364700570622/7785922579</string>
 
   <string name="splash_popup_title">Something went wrong</string>
-  <string name="splash_popup_message">We apologize, but our services are having a rough time
-    right now.\n\nPlease, try again later!\n\n<b>The application will close now.</b></string>
+  <string name="splash_popup_message">We apologize, but our services are having a rough time     right now.  Please, try again later!  <b>The application will close now.</b></string>
   <string name="welcome">Welcome!</string>
   <string name="start_typing_here">Start typing here…</string>
-  <string name="country_field">To find the data for the country you want, please enter the country in the field below.</string>
+  <string name="country_field">To find the data for the country you want, please enter the country name in the field below.</string>
+  <string name="country_field_history">To find the historical data for the country you want, please enter the country in the field below.</string>
   <string name="title_activity_maps">Map</string>
   <string name="number_of_cases">Number of Cases:</string>
   <string name="cases_today">Cases Today:</string>
@@ -26,9 +31,42 @@
   <string name="cases">Cases:</string>
   <string name="world_data">World Data</string>
 
-  <!-- TODO: Remove or change this placeholder text -->
-  <string name="hello_blank_fragment">Hello blank fragment</string>
+  <string name="cases_percentage">Cases %:</string>
+  <string name="deaths_percentage">Deaths %:</string>
   <string name="charts">Charts</string>
   <string name="list">List</string>
+  <string name="evoluction_of_cases_and_deaths">Evolution of the cases numbers and deaths numbers</string>
+  <string name="evolution_of_cases_and_deaths_percentage">Evolution of the cases and deaths percentages overtime</string>
+
+  <string name="title_informations">Informations</string>
+
+  <string name="icon_made"><![CDATA[Some Icons were also made by: <br> <b><a href="https://www.flaticon.com/br/autores/nhor-phai">Nhor Phai</a></b> <br>
+      and <br> <b><a href="https://www.flaticon.com/br/autores/freepik">Freepik</a></b> <br>
+      from  <b><a href="https://www.flaticon.com">www.flaticon.com</a></b>
+<p>Check them out and give them some love!</p>]]></string>
+
+  <string name="app_info"><![CDATA[
+      <p>This application was made <br> to help people keep track <br> of the
+    Novel Coronavirus Disease numbers, <br>suchs as: Cases, Deaths, etc…</p>
+  <br>
+  <p>If you have a new idea to add to this application, or if you found a bug, please contact  <br><b><a
+  href="mailto:covidtwoday@gmail.com">Covid2Day Team</a></b> <br>with your ideas! <b> You will
+  be heard!</b></p>]]></string>
+
+  <string name="developer_info"><![CDATA[
+      <p>The application icon and logo were made by:<br> <b><a href="https://www.instagram.com/marta.louzeiro/">Marta Louzeiro</a></b> <br> Give her some love for the great ArtWork!</p>
+      <p>This application was developed by:<br> <b>Rodrigo Fernandes</b></p>
+      <p>I am an IT student trying to make my way out!<br>This is my first standalone work!</p>
+<p>If you have work for me, please contact me by the email present on GooglePlay!</p> ]]></string>
+
+  <string name="appeal"><![CDATA[ The team of <b><a
+  href="mailto:covidtwoday@gmail.com">Covid2Day</a></b> begs you to stay at home! We will only overcome this situation if we <b>ALL</B> fulfill our civic <b>duty</b> to stay at home. Do not be selfish. People are dying! And more and more every day!<br> Thank you.]]></string>
+  <string name="stay_home">stay home</string>
+
+  <string name="no_ads_title" >No ads to display</string>
+  <string name="no_ads_message">Sorry. It appears that there is no ads at the moment! You may procede!</string>
+  <string name="ad_closed">It looks like you closed the ad…</string>
+  <string name="ad_closed_message">We\'re sorry. It looks that you closed the ad… This app needs     you tosupport it by watching some ads every now and then in order to run some services like     GoogleMaps! Can you help us please?</string>
+  <string name="title_activity_ads_rewarded">AdsRewardedActivity</string>
 
 </resources>

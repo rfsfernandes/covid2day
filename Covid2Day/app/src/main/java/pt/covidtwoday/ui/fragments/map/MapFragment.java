@@ -1,5 +1,8 @@
 package pt.covidtwoday.ui.fragments.map;
 
+import android.app.Application;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -52,8 +55,14 @@ import pt.covidtwoday.custom.permissions.PermissionsHandler;
 import pt.covidtwoday.model.CountryData;
 import pt.covidtwoday.model.WorldInfo;
 import pt.covidtwoday.model.viewmodels.MapViewModel;
+import pt.covidtwoday.ui.activities.AdsRewardedActivity;
 
-public class MapFragment extends Fragment implements OnMapReadyCallback {
+import static android.app.Activity.RESULT_OK;
+import static pt.covidtwoday.custom.Constants.REQUEST_CODE_ADS;
+import static pt.covidtwoday.custom.Constants.RESULT_NO_ADS;
+
+public class MapFragment extends Fragment implements OnMapReadyCallback,
+    GoogleMap.OnMapLoadedCallback {
 
   //  Place ViewBinding here
   @BindView(R.id.mapView)
@@ -86,6 +95,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
   private BottomSheetBehavior behavior;
   private View rootView;
   private boolean toShowWorld = false;
+  private CovidTwoDayApp mApp;
 
   public View onCreateView(@NonNull LayoutInflater inflater,
                            ViewGroup container, Bundle savedInstanceState) {
@@ -98,12 +108,13 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
     handleProgress(true);
 
-    MobileAds.initialize(getContext(), new OnInitializationCompleteListener() {
-      @Override
-      public void onInitializationComplete(InitializationStatus initializationStatus) {
-      }
-    });
+//    MobileAds.initialize(getContext(), new OnInitializationCompleteListener() {
+//      @Override
+//      public void onInitializationComplete(InitializationStatus initializationStatus) {
+//      }
+//    });
     AdRequest adRequest = new AdRequest.Builder().build();
+    mApp = (CovidTwoDayApp) getActivity().getApplication();
     adView.loadAd(adRequest);
     behavior = BottomSheetBehavior.from(cardViewSheetWorld);
     behavior.setHideable(true);
@@ -114,7 +125,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
   @Override
   public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
-    initViewModel();
+
   }
 
   @Override
@@ -141,15 +152,12 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
   public void onMapReady(GoogleMap googleMap) {
     mGoogleMap = googleMap;
     LatLng latLng = new LatLng(40.999683, -35.025366);
-    googleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+    mGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
     if (getActivity() != null && getContext() != null) {
-      googleMap.setInfoWindowAdapter(new CustomInfoWindowAdapter(getContext()));
-
+      mGoogleMap.setInfoWindowAdapter(new CustomInfoWindowAdapter(getContext()));
+      initViewModel();
       mMapViewModel.getCountriesData();
-
     }
-
-
   }
 
   private void initViewModel() {
@@ -170,7 +178,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
           if (getActivity() != null) {
             getActivity().runOnUiThread(() -> {
               Marker marker = MapFragment.this.mGoogleMap.addMarker(markerOptions);
-              marker.setIcon(BitmapDescriptorFactory.fromBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.placeholder)));
+              if (getContext() != null) {
+                marker.setIcon(BitmapDescriptorFactory.fromBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.placeholder)));
+              }
+
             });
           }
         }
@@ -182,7 +193,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
 
     mMapViewModel.worldLiveData.observe(getActivity(), worldInfo -> {
-      if(toShowWorld){
+      if (toShowWorld) {
         showWorldInfo(worldInfo);
       }
 
@@ -209,37 +220,97 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     Calendar calendar = Calendar.getInstance();
     calendar.setTimeInMillis(worldInfo.getUpdated());
 
-    if(Locale.getDefault().toString().contains("us") || Locale.getDefault().toString().contains(
-        "US") || Locale.getDefault().toString().contains("en") || Locale.getDefault().toString().contains("EN") ){
-      textViewUpdatedAt.setText(String.format(Locale.getDefault(),"Updated at: %d/%d/%d",
+    if (Locale.getDefault().toString().contains("us") || Locale.getDefault().toString().contains(
+        "US") || Locale.getDefault().toString().contains("en") || Locale.getDefault().toString().contains("EN")) {
+      textViewUpdatedAt.setText(String.format(Locale.getDefault(), "Updated at: %d/%d/%d",
           calendar.get(Calendar.MONTH) + 1,
           calendar.get(Calendar.DAY_OF_MONTH), calendar.get(Calendar.YEAR)));
-    }else{
-      textViewUpdatedAt.setText(String.format(Locale.getDefault(),"Updated at: %d/%d/%d",
+    } else {
+      textViewUpdatedAt.setText(String.format(Locale.getDefault(), "Updated at: %d/%d/%d",
           calendar.get(Calendar.DAY_OF_MONTH), calendar.get(Calendar.MONTH) + 1,
           calendar.get(Calendar.YEAR)));
     }
 
 
-    if(behavior != null) {
+    if (behavior != null) {
       behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
     }
     handleProgress(false);
   }
 
   private void handleProgress(boolean show) {
-    progressBarMap.setIndeterminate(show);
-    progressBarMap.setVisibility(show ? View.VISIBLE : View.INVISIBLE);
-    toShowWorld = show;
+    if (progressBarMap != null) {
+      progressBarMap.setIndeterminate(show);
+      progressBarMap.setVisibility(show ? View.VISIBLE : View.INVISIBLE);
+      toShowWorld = show;
+    }
+
   }
 
   @OnClick(R.id.linearLayoutWorldData)
   void getWorldInfo() {
-    if(behavior.getState() == BottomSheetBehavior.STATE_EXPANDED && behavior != null){
-      behavior.setState(BottomSheetBehavior.STATE_HIDDEN);
-    }else{
-      handleProgress(true);
-      mMapViewModel.getWorldData();
+    if (getActivity() != null) {
+
+
+
+      if (behavior.getState() == BottomSheetBehavior.STATE_EXPANDED && behavior != null) {
+        behavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+      } else {
+        handleProgress(true);
+        mApp.setTokenAmount(mApp.getTokenAmount() - 1);
+        if (mApp.getTokenAmount() <= 0) {
+          startActivityForResult(new Intent(getActivity(), AdsRewardedActivity.class),
+              REQUEST_CODE_ADS);
+        } else {
+          mMapViewModel.getWorldData();
+        }
+
+      }
+
     }
+
+  }
+
+  @Override
+  public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+    super.onActivityResult(requestCode, resultCode, data);
+    if(requestCode == REQUEST_CODE_ADS){
+      if(resultCode == RESULT_OK){
+        mMapViewModel.getWorldData();
+      }else if(resultCode == RESULT_NO_ADS){
+        if(getContext() != null){
+          new AlertDialog.Builder(getContext())
+              .setTitle(getResources().getString(R.string.no_ads_title))
+              .setMessage(getResources().getString(R.string.no_ads_message))
+              .setPositiveButton(getResources().getString(R.string.ok), (dialogInterface, i) -> {
+                mMapViewModel.getWorldData();
+                dialogInterface.dismiss();
+              }).create().show();
+        }
+
+      }else{
+        if(getContext() != null){
+          new AlertDialog.Builder(getContext())
+              .setTitle(getResources().getString(R.string.ad_closed))
+              .setMessage(getResources().getString(R.string.ad_closed_message))
+              .setPositiveButton(getResources().getString(R.string.ok), (dialogInterface, i) -> {
+                startActivityForResult(new Intent(getActivity(), AdsRewardedActivity.class),
+                    REQUEST_CODE_ADS);
+              })
+              .setNegativeButton(getResources().getString(R.string.cancel), (dialogInterface, i) -> {
+                mApp.setTokenAmount(3);
+                mMapViewModel.getWorldData();
+                dialogInterface.dismiss();
+              }).create().show();
+        }
+
+      }
+    }
+
+  }
+
+  @Override
+  public void onMapLoaded() {
+
   }
 }

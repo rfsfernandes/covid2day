@@ -6,6 +6,8 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
@@ -20,6 +22,7 @@ import java.util.Map;
 public class UtilsClass {
 
   private static UtilsClass instance;
+  private static DecimalFormat df2 = new DecimalFormat("#.##");
 
   public static UtilsClass getInstance() {
     if (instance != null) {
@@ -52,6 +55,9 @@ public class UtilsClass {
     }
     win.setAttributes(winParams);
   }
+
+
+
 
   public HashMap sortByValues(HashMap map) {
     List list = new LinkedList(map.entrySet());
@@ -94,6 +100,11 @@ public class UtilsClass {
       sortedHashMap.put(entry.getKey(), entry.getValue());
     }
     return sortedHashMap;
+  }
+
+  public String formatedDouble(double input){
+    df2.setRoundingMode(RoundingMode.UP);
+    return df2.format(input);
   }
 
 }

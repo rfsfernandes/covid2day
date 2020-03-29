@@ -40,11 +40,11 @@ public class ChartsFragment extends Fragment {
 
   private Unbinder mUnbinder;
   private List<DataEntry> dataEntries;
-
   private TYPE mTYPE;
+  private AnyChartView.OnRenderedListener mOnRenderedListener;
 
-  public List<DataEntry> getDataEntries() {
-    return dataEntries;
+  public void setOnRenderedListener(AnyChartView.OnRenderedListener onRenderedListener) {
+    mOnRenderedListener = onRenderedListener;
   }
 
   public void setDataEntries(List<DataEntry> dataEntries) {
@@ -68,10 +68,12 @@ public class ChartsFragment extends Fragment {
     PERCENTAGES
   }
 
-  public static ChartsFragment getInstance(List<DataEntry> dataEntries, TYPE type){
+  public static ChartsFragment getInstance(AnyChartView.OnRenderedListener onRenderedListener,
+                                           List<DataEntry> dataEntries, TYPE type){
     ChartsFragment chartsFragment = new ChartsFragment();
     chartsFragment.setDataEntries(dataEntries);
     chartsFragment.setTYPE(type);
+    chartsFragment.setOnRenderedListener(onRenderedListener);
     return chartsFragment;
   }
 
@@ -89,6 +91,7 @@ public class ChartsFragment extends Fragment {
   public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
     mChartView.setChart(makeCartesianCases(dataEntries));
+    mChartView.setOnRenderedListener(mOnRenderedListener);
   }
 
   @Override
@@ -104,10 +107,10 @@ public class ChartsFragment extends Fragment {
 
     switch (mTYPE){
       case CASES:
-        cartesian.title("Evolution of the cases and deaths");
+        cartesian.title(getResources().getString(R.string.evoluction_of_cases_and_deaths));
         break;
       case PERCENTAGES:
-        cartesian.title("Evolution of the cases and deaths percentages overtime");
+        cartesian.title(getResources().getString(R.string.evolution_of_cases_and_deaths_percentage));
         break;
     }
 
@@ -121,10 +124,10 @@ public class ChartsFragment extends Fragment {
     Line series1 = cartesian.line(series2Mapping);
     switch (mTYPE){
       case CASES:
-        series1.name("Cases");
+        series1.name(getResources().getString(R.string.cases));
         break;
       case PERCENTAGES:
-        series1.name("Cases %");
+        series1.name(getResources().getString(R.string.cases) + " %");
         break;
     }
 
@@ -142,10 +145,10 @@ public class ChartsFragment extends Fragment {
     Line series2 = cartesian.line(series1Mapping);
     switch (mTYPE){
       case CASES:
-        series2.name("Deaths");
+        series2.name(getResources().getString(R.string.deaths));
         break;
       case PERCENTAGES:
-        series2.name("Deaths %");
+        series2.name(getResources().getString(R.string.cases) + " %");
         break;
     }
 

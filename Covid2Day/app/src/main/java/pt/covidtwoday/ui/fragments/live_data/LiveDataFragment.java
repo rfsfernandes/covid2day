@@ -1,6 +1,7 @@
 package pt.covidtwoday.ui.fragments.live_data;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -39,6 +40,11 @@ import pt.covidtwoday.R;
 import pt.covidtwoday.custom.CovidTwoDayApp;
 import pt.covidtwoday.model.CountryData;
 import pt.covidtwoday.model.viewmodels.LiveDataViewModel;
+import pt.covidtwoday.ui.activities.AdsRewardedActivity;
+
+import static android.app.Activity.RESULT_OK;
+import static pt.covidtwoday.custom.Constants.REQUEST_CODE_ADS;
+import static pt.covidtwoday.custom.Constants.RESULT_NO_ADS;
 
 public class LiveDataFragment extends Fragment {
 
@@ -84,6 +90,7 @@ public class LiveDataFragment extends Fragment {
 
   private Unbinder mUnbinder;
   private BottomSheetBehavior behavior;
+  private CovidTwoDayApp mApp;
 
   public View onCreateView(@NonNull LayoutInflater inflater,
                            ViewGroup container, Bundle savedInstanceState) {
@@ -95,8 +102,7 @@ public class LiveDataFragment extends Fragment {
     behavior = BottomSheetBehavior.from(cardViewSheet);
     behavior.setHideable(true);
     behavior.setState(BottomSheetBehavior.STATE_HIDDEN);
-    progressBar.getIndeterminateDrawable().setColorFilter(getResources().getColor(R.color.colorPrimary, null),
-        PorterDuff.Mode.MULTIPLY);
+
     return root;
   }
 
@@ -104,14 +110,23 @@ public class LiveDataFragment extends Fragment {
   public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
 
-    CovidTwoDayApp covidTwoDayApp = (CovidTwoDayApp) Objects.requireNonNull(getActivity()).getApplication();
+    mApp = (CovidTwoDayApp) Objects.requireNonNull(getActivity()).getApplication();
 
     ArrayAdapter<String> adapter = new ArrayAdapter<String>(
-        Objects.requireNonNull(getContext()), android.R.layout.simple_spinner_item, covidTwoDayApp.getCountriesNameList());
+        Objects.requireNonNull(getContext()), android.R.layout.simple_spinner_item, mApp.getCountriesNameList());
 
     mAutoCompleteTextView.setAdapter(adapter);
 
-    mAutoCompleteTextView.setOnItemClickListener((adapterView, view1, i, l) -> performSearch(mAutoCompleteTextView.getText().toString()));
+    mAutoCompleteTextView.setOnItemClickListener((adapterView, view1, i, l) -> {
+      mApp.setTokenAmount(mApp.getTokenAmount() - 1);
+      if (mApp.getTokenAmount() <= 0) {
+        startActivityForResult(new Intent(getActivity(), AdsRewardedActivity.class),
+            REQUEST_CODE_ADS);
+      } else {
+        performSearch(mAutoCompleteTextView.getText().toString());
+      }
+
+    });
 
     initViewModel();
   }
@@ -182,7 +197,15 @@ public class LiveDataFragment extends Fragment {
   @OnEditorAction(R.id.autoCompleteTextView)
   boolean onEditorAction(EditText editText, int actionId, KeyEvent keyEvent){
     if (actionId == EditorInfo.IME_ACTION_DONE) {
-      performSearch(mAutoCompleteTextView.getText().toString());
+
+      mApp.setTokenAmount(mApp.getTokenAmount() - 1);
+      if (mApp.getTokenAmount() <= 0) {
+        startActivityForResult(new Intent(getActivity(), AdsRewardedActivity.class),
+            REQUEST_CODE_ADS);
+      } else {
+        performSearch(mAutoCompleteTextView.getText().toString());
+      }
+
       return true;
     }
     return false;
@@ -197,6 +220,44 @@ public class LiveDataFragment extends Fragment {
   private void handleProgress(boolean show){
     progressBar.setIndeterminate(show);
     progressBar.setVisibility(show ? View.VISIBLE : View.INVISIBLE);
+  }
+
+  @Override
+  public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+    super.onActivityResult(requestCode, resultCode, data);
+    if(requestCode == REQUEST_CODE_ADS){
+      if(resultCode == RESULT_OK){
+        performSearch(mAutoCompleteTextView.getText().toString());
+      }else if(resultCode == RESULT_NO_ADS){
+        if(getContext() != null){
+          new AlertDialog.Builder(getContext())
+              .setTitle(getResources().getString(R.string.no_ads_title))
+              .setMessage(getResources().getString(R.string.no_ads_message))
+              .setPositiveButton(getResources().getString(R.string.ok), (dialogInterface, i) -> {
+                performSearch(mAutoCompleteTextView.getText().toString());
+                dialogInterface.dismiss();
+              }).create().show();
+        }
+
+      }else{
+        if(getContext() != null){
+          new AlertDialog.Builder(getContext())
+              .setTitle(getResources().getString(R.string.ad_closed))
+              .setMessage(getResources().getString(R.string.ad_closed_message))
+              .setPositiveButton(getResources().getString(R.string.ok), (dialogInterface, i) -> {
+                startActivityForResult(new Intent(getActivity(), AdsRewardedActivity.class),
+                    REQUEST_CODE_ADS);
+              })
+              .setNegativeButton(getResources().getString(R.string.cancel), (dialogInterface, i) -> {
+                mApp.setTokenAmount(3);
+                performSearch(mAutoCompleteTextView.getText().toString());
+                dialogInterface.dismiss();
+              }).create().show();
+        }
+
+      }
+    }
+
   }
 
 }
