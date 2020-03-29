@@ -2,13 +2,11 @@ package pt.covidtwoday.ui.fragments.live_data;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
@@ -19,25 +17,25 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
 import java.util.Objects;
 
-import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.cardview.widget.CardView;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
-
 import androidx.lifecycle.ViewModelProviders;
+import androidx.navigation.Navigation;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnEditorAction;
 import butterknife.Unbinder;
 import pt.covidtwoday.R;
 import pt.covidtwoday.custom.CovidTwoDayApp;
+import pt.covidtwoday.data.local.SharedPreferencesManager;
 import pt.covidtwoday.model.CountryData;
 import pt.covidtwoday.model.viewmodels.LiveDataViewModel;
 import pt.covidtwoday.ui.activities.AdsRewardedActivity;
@@ -45,6 +43,7 @@ import pt.covidtwoday.ui.activities.AdsRewardedActivity;
 import static android.app.Activity.RESULT_OK;
 import static pt.covidtwoday.custom.Constants.REQUEST_CODE_ADS;
 import static pt.covidtwoday.custom.Constants.RESULT_NO_ADS;
+import static pt.covidtwoday.ui.fragments.map.MapFragment.COUNTRY_BUNDLE;
 
 public class LiveDataFragment extends Fragment {
 
@@ -117,6 +116,15 @@ public class LiveDataFragment extends Fragment {
 
     mAutoCompleteTextView.setAdapter(adapter);
 
+    if (getArguments() != null) {
+      Bundle bundle = getArguments();
+
+      String country = bundle.getString(COUNTRY_BUNDLE);
+
+      performSearch(country);
+
+    }
+
     mAutoCompleteTextView.setOnItemClickListener((adapterView, view1, i, l) -> {
       mApp.setTokenAmount(mApp.getTokenAmount() - 1);
       if (mApp.getTokenAmount() <= 0) {
@@ -129,9 +137,19 @@ public class LiveDataFragment extends Fragment {
     });
 
     initViewModel();
+
+    boolean isFirstTime = SharedPreferencesManager.getInstance().getFirstTime(getContext());
+
+    if(isFirstTime){
+      if(getActivity() != null){
+        Navigation.findNavController(getActivity(),R.id.nav_host_fragment).navigate(R.id.action_navigation_live_data_to_navigation_info);
+        SharedPreferencesManager.getInstance().setFirstTime(getActivity().getApplication(), false);
+      }
+    }
+
   }
 
-  private void initViewModel(){
+  private void initViewModel() {
     mLiveDataViewModel.mCountryDataMutableLiveData.observe(Objects.requireNonNull(getActivity()), this::showBottomSheet);
 
     mLiveDataViewModel.errorLiveData.observe(getActivity(), errorMessage -> {
@@ -146,7 +164,7 @@ public class LiveDataFragment extends Fragment {
   }
 
   private void showBottomSheet(CountryData countryData) {
-    if(getContext() != null){
+    if (getContext() != null) {
       Glide.with(getContext()).load(countryData.getCountryInfo().getFlag()).into(imageViewCountryFlag);
       textViewCountryName.setText(countryData.getCountry());
       textViewActiveCases.setText(String.valueOf(countryData.getActive()));
@@ -188,14 +206,14 @@ public class LiveDataFragment extends Fragment {
   @Override
   public void onDestroy() {
     super.onDestroy();
-    if(mUnbinder != null){
+    if (mUnbinder != null) {
       mUnbinder.unbind();
     }
 
   }
 
   @OnEditorAction(R.id.autoCompleteTextView)
-  boolean onEditorAction(EditText editText, int actionId, KeyEvent keyEvent){
+  boolean onEditorAction(EditText editText, int actionId, KeyEvent keyEvent) {
     if (actionId == EditorInfo.IME_ACTION_DONE) {
 
       mApp.setTokenAmount(mApp.getTokenAmount() - 1);
@@ -211,13 +229,13 @@ public class LiveDataFragment extends Fragment {
     return false;
   }
 
-  private void performSearch(String country){
+  private void performSearch(String country) {
     hideKeyboard(Objects.requireNonNull(getActivity()));
     handleProgress(true);
     mLiveDataViewModel.getCountryData(country);
   }
 
-  private void handleProgress(boolean show){
+  private void handleProgress(boolean show) {
     progressBar.setIndeterminate(show);
     progressBar.setVisibility(show ? View.VISIBLE : View.INVISIBLE);
   }
@@ -225,11 +243,11 @@ public class LiveDataFragment extends Fragment {
   @Override
   public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
     super.onActivityResult(requestCode, resultCode, data);
-    if(requestCode == REQUEST_CODE_ADS){
-      if(resultCode == RESULT_OK){
+    if (requestCode == REQUEST_CODE_ADS) {
+      if (resultCode == RESULT_OK) {
         performSearch(mAutoCompleteTextView.getText().toString());
-      }else if(resultCode == RESULT_NO_ADS){
-        if(getContext() != null){
+      } else if (resultCode == RESULT_NO_ADS) {
+        if (getContext() != null) {
           new AlertDialog.Builder(getContext())
               .setTitle(getResources().getString(R.string.no_ads_title))
               .setMessage(getResources().getString(R.string.no_ads_message))
@@ -239,8 +257,8 @@ public class LiveDataFragment extends Fragment {
               }).create().show();
         }
 
-      }else{
-        if(getContext() != null){
+      } else {
+        if (getContext() != null) {
           new AlertDialog.Builder(getContext())
               .setTitle(getResources().getString(R.string.ad_closed))
               .setMessage(getResources().getString(R.string.ad_closed_message))

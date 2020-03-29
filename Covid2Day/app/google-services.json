@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "1070298762603",
+    "firebase_url": "https://covidtwogo.firebaseio.com",
+    "project_id": "covidtwogo",
+    "storage_bucket": "covidtwogo.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1070298762603:android:f04ff2a8b77afc4d56902e",
+        "android_client_info": {
+          "package_name": "pt.covidtwoday"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1070298762603-tgcamin0ngvovdml555jaltvn22h3o5o.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "pt.covidtwoday",
+            "certificate_hash": "7421b99ea47d9a162e40bb496dc652b1e4a19962"
+          }
+        },
+        {
+          "client_id": "1070298762603-aqn0qqe3uolbbsih4euejg0n79pj557s.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAAHQeZOXCzIeXXyyx2zKXl0EM0AemBWA4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1070298762603-aqn0qqe3uolbbsih4euejg0n79pj557s.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

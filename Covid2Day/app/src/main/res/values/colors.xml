@@ -3,9 +3,7 @@
   <color name="colorPrimary">#DF3C58</color>
   <color name="colorPrimaryDark">#5C6C69</color>
   <color name="colorAccent">#6AB09A</color>
-  <color name="colorPrimeryDark_lighter">#C1C2B9</color>
 
   <color name="inputBackground">#806AB09A</color>
-  <color name="black">#000000</color>
   <color name="divider_color">#4D5C6C69</color>
 </resources>

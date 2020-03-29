@@ -1,31 +1,34 @@
 package pt.covidtwoday.custom.map_info_window;
 
-import android.content.Context;
+import android.app.Activity;
+import android.app.Application;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.Marker;
 import com.google.gson.Gson;
 
 import pt.covidtwoday.R;
+import pt.covidtwoday.custom.CovidTwoDayApp;
 import pt.covidtwoday.model.CountryData;
 
 public class CustomInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
 
   private final View mWindow;
-  private Context mContext;
+  private Activity mActivity;
+  private CovidTwoDayApp mApp;
 
-  public CustomInfoWindowAdapter(Context context) {
-    mContext = context;
-    mWindow = LayoutInflater.from(context).inflate(R.layout.custom_info_window_map, null);
+  public CustomInfoWindowAdapter(Activity activity, Application application) {
+    mActivity = activity;
+    mApp = (CovidTwoDayApp) application;
+    mWindow = LayoutInflater.from(mActivity).inflate(R.layout.custom_info_window_map, null);
   }
 
-  private void renderWindow(Marker marker, View view){
-    if(marker.getSnippet() != null){
+  private void renderWindow(Marker marker, View view) {
+    if (marker.getSnippet() != null) {
+
       CountryData countryData = new Gson().fromJson(marker.getSnippet(), CountryData.class);
 
       TextView textViewCountryName = view.findViewById(R.id.textViewCountryTitle);

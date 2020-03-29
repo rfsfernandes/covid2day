@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import pt.covidtwoday.R;
-import pt.covidtwoday.custom.template_adapter.TemplateAdapter;
 import pt.covidtwoday.custom.utils.UtilsClass;
 import pt.covidtwoday.model.HistoryListModel;
 

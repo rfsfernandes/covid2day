@@ -1,7 +1,5 @@
 package pt.covidtwoday.ui.fragments.map;
 
-import android.app.Application;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -11,13 +9,8 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.MobileAds;
-import com.google.android.gms.ads.initialization.InitializationStatus;
-import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
-import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -29,20 +22,17 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.gson.Gson;
 
-import java.text.MessageFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
-import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
-
 import androidx.lifecycle.ViewModelProviders;
+import androidx.navigation.Navigation;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -50,8 +40,6 @@ import butterknife.Unbinder;
 import pt.covidtwoday.R;
 import pt.covidtwoday.custom.CovidTwoDayApp;
 import pt.covidtwoday.custom.map_info_window.CustomInfoWindowAdapter;
-import pt.covidtwoday.custom.permissions.PermissionsCallBack;
-import pt.covidtwoday.custom.permissions.PermissionsHandler;
 import pt.covidtwoday.model.CountryData;
 import pt.covidtwoday.model.WorldInfo;
 import pt.covidtwoday.model.viewmodels.MapViewModel;
@@ -61,8 +49,8 @@ import static android.app.Activity.RESULT_OK;
 import static pt.covidtwoday.custom.Constants.REQUEST_CODE_ADS;
 import static pt.covidtwoday.custom.Constants.RESULT_NO_ADS;
 
-public class MapFragment extends Fragment implements OnMapReadyCallback,
-    GoogleMap.OnMapLoadedCallback {
+public class MapFragment extends Fragment implements OnMapReadyCallback{
+
 
   //  Place ViewBinding here
   @BindView(R.id.mapView)
@@ -84,10 +72,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
   TextView textViewWorldRecovered;
   @BindView(R.id.textViewUpdatedAt)
   TextView textViewUpdatedAt;
-//  Place static constants here
-
-//  Place constants here
-
+  //  Place static constants here
+  public static final String COUNTRY_BUNDLE = "COUNTRY_BUNDLE";
+  //  Place constants here
+  private final LatLng mapCenterFocus = new LatLng(38.681446, 18.502857); //center
   //  Place viarables here
   private MapViewModel mMapViewModel;
   private Unbinder mUnbinder;
@@ -96,6 +84,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
   private View rootView;
   private boolean toShowWorld = false;
   private CovidTwoDayApp mApp;
+
 
   public View onCreateView(@NonNull LayoutInflater inflater,
                            ViewGroup container, Bundle savedInstanceState) {
@@ -108,11 +97,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
 
     handleProgress(true);
 
-//    MobileAds.initialize(getContext(), new OnInitializationCompleteListener() {
-//      @Override
-//      public void onInitializationComplete(InitializationStatus initializationStatus) {
-//      }
-//    });
     AdRequest adRequest = new AdRequest.Builder().build();
     mApp = (CovidTwoDayApp) getActivity().getApplication();
     adView.loadAd(adRequest);
@@ -151,10 +135,31 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
   @Override
   public void onMapReady(GoogleMap googleMap) {
     mGoogleMap = googleMap;
-    LatLng latLng = new LatLng(40.999683, -35.025366);
-    mGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+
+    mGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(mapCenterFocus));
     if (getActivity() != null && getContext() != null) {
-      mGoogleMap.setInfoWindowAdapter(new CustomInfoWindowAdapter(getContext()));
+      mGoogleMap.setInfoWindowAdapter(new CustomInfoWindowAdapter(getActivity(),
+          getActivity().getApplication()));
+
+      mGoogleMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+        @Override
+        public void onInfoWindowClick(Marker marker) {
+          mApp.setTokenAmount(mApp.getTokenAmount() - 1);
+          if (mApp.getTokenAmount() <= 0) {
+            startActivityForResult(new Intent(getActivity(), AdsRewardedActivity.class),
+                REQUEST_CODE_ADS);
+          } else {
+            Bundle bundle = new Bundle();
+            CountryData countryData = new Gson().fromJson(marker.getSnippet(), CountryData.class);
+            bundle.putString(COUNTRY_BUNDLE, countryData.getCountry());
+
+
+            Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.action_navigation_map_to_navigation_live_data, bundle);
+
+          }
+        }
+      });
+
       initViewModel();
       mMapViewModel.getCountriesData();
     }
@@ -252,7 +257,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
     if (getActivity() != null) {
 
 
-
       if (behavior.getState() == BottomSheetBehavior.STATE_EXPANDED && behavior != null) {
         behavior.setState(BottomSheetBehavior.STATE_HIDDEN);
       } else {
@@ -274,11 +278,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
   @Override
   public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
     super.onActivityResult(requestCode, resultCode, data);
-    if(requestCode == REQUEST_CODE_ADS){
-      if(resultCode == RESULT_OK){
+    if (requestCode == REQUEST_CODE_ADS) {
+      if (resultCode == RESULT_OK) {
         mMapViewModel.getWorldData();
-      }else if(resultCode == RESULT_NO_ADS){
-        if(getContext() != null){
+      } else if (resultCode == RESULT_NO_ADS) {
+        if (getContext() != null) {
           new AlertDialog.Builder(getContext())
               .setTitle(getResources().getString(R.string.no_ads_title))
               .setMessage(getResources().getString(R.string.no_ads_message))
@@ -288,8 +292,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
               }).create().show();
         }
 
-      }else{
-        if(getContext() != null){
+      } else {
+        if (getContext() != null) {
           new AlertDialog.Builder(getContext())
               .setTitle(getResources().getString(R.string.ad_closed))
               .setMessage(getResources().getString(R.string.ad_closed_message))
@@ -309,8 +313,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
 
   }
 
-  @Override
-  public void onMapLoaded() {
 
-  }
+
 }

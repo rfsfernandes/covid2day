@@ -1,19 +1,17 @@
 package pt.covidtwoday.custom.template_adapter;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.content.Context;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
-import java.util.Objects;
 import java.util.List;
 
 import androidx.annotation.NonNull;
-import butterknife.BindView;
+import androidx.recyclerview.widget.RecyclerView;
 import butterknife.ButterKnife;
 import pt.covidtwoday.R;
-import androidx.recyclerview.widget.RecyclerView;
 
 
 public class TemplateAdapter extends RecyclerView.Adapter<TemplateAdapter.TemplateViewHolder> {

@@ -2,20 +2,36 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/mobile_navigation"
     app:startDestination="@+id/navigation_live_data">
 
   <fragment
       android:id="@+id/navigation_live_data"
       android:name="pt.covidtwoday.ui.fragments.live_data.LiveDataFragment"
       android:label="@string/title_live_data"
-      tools:layout="@layout/fragment_live_data" />
+      tools:layout="@layout/fragment_live_data" >
+    <action
+        android:id="@+id/action_navigation_live_data_to_navigation_info"
+        app:destination="@id/navigation_info"
+        app:enterAnim="@anim/fragment_fade_enter"
+        app:exitAnim="@anim/fragment_fade_exit"
+        app:popEnterAnim="@anim/fragment_fade_enter"
+        app:popExitAnim="@anim/fragment_fade_exit" />
+  </fragment>
 
   <fragment
       android:id="@+id/navigation_map"
       android:name="pt.covidtwoday.ui.fragments.map.MapFragment"
       android:label="@string/title_map"
-      tools:layout="@layout/fragment_map" />
+      tools:layout="@layout/fragment_map" >
+    <action
+        android:id="@+id/action_navigation_map_to_navigation_live_data"
+        app:destination="@id/navigation_live_data"
+        app:enterAnim="@anim/fragment_fade_enter"
+        app:exitAnim="@anim/fragment_fade_exit"
+        app:popEnterAnim="@anim/fragment_fade_enter"
+        app:popExitAnim="@anim/fragment_fade_exit"
+        app:popUpTo="@+id/navigation_map" />
+  </fragment>
 
   <fragment
       android:id="@+id/navigation_history"

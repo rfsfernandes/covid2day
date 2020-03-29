@@ -6,8 +6,8 @@ import java.util.List;
 
 import androidx.annotation.NonNull;
 import pt.covidtwoday.data.local.AppDatabase;
-import pt.covidtwoday.data.remote.DataSource;
 import pt.covidtwoday.data.remote.ApiService;
+import pt.covidtwoday.data.remote.DataSource;
 import pt.covidtwoday.model.CountryData;
 import pt.covidtwoday.model.CountryHistory;
 import pt.covidtwoday.model.WorldInfo;

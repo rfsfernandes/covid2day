@@ -1,22 +1,17 @@
 package pt.covidtwoday.ui.activities;
 
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.ViewModelProviders;
-import androidx.navigation.Navigation;
-import butterknife.Unbinder;
-import pt.covidtwoday.R;
-import pt.covidtwoday.custom.CovidTwoDayApp;
-import pt.covidtwoday.custom.utils.UtilsClass;
-import pt.covidtwoday.model.viewmodels.SplashScreenViewModel;
-
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
 
-import com.google.android.material.snackbar.Snackbar;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProviders;
+import pt.covidtwoday.R;
+import pt.covidtwoday.custom.CovidTwoDayApp;
+import pt.covidtwoday.custom.utils.UtilsClass;
+import pt.covidtwoday.model.viewmodels.SplashScreenViewModel;
 
 public class SplashScreenActivity extends AppCompatActivity {
 

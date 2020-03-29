@@ -1,5 +1,11 @@
 package pt.covidtwoday.data.local;
 
+import android.app.Application;
+import android.content.Context;
+import android.content.SharedPreferences;
+
+import static pt.covidtwoday.custom.Constants.PREFS;
+
 public class SharedPreferencesManager {
   private static SharedPreferencesManager instance;
 
@@ -17,27 +23,27 @@ public class SharedPreferencesManager {
     }
   }
 
-//  private static SharedPreferences sharedToken;
-//  private static SharedPreferences.Editor sharedTokenEditor;
-//
-//  private void setTokenAmmount(Application application, int tokens){
-//    if (sharedToken == null || sharedTokenEditor == null) {
-//      sharedToken = application.getSharedPreferences(TOKEN_PREFERENCES, Context.MODE_PRIVATE);
-//      sharedTokenEditor = sharedToken.edit();
-//
-//    }
-//
-//    sharedTokenEditor.putInt(TOKEN_PREFERENCES, tokens);
-//    sharedTokenEditor.apply();
-//
-//  }
-//
-//  public String getTokenAmmount(Context context) {
-//    if (sharedTrails == null) {
-//      sharedTrails = context.getApplicationContext().getSharedPreferences(COURSES_PREFS, Context.MODE_PRIVATE);
-//    }
-//    return sharedTrails.getString(COURSES_TYPE_PREFS, "");
-//  }
+  private static SharedPreferences sSharedPreferences;
+  private static SharedPreferences.Editor sEditor;
+
+  public void setFirstTime(Application application, boolean firstTime){
+    if (sSharedPreferences == null || sEditor == null) {
+      sSharedPreferences = application.getSharedPreferences(PREFS, Context.MODE_PRIVATE);
+      sEditor = sSharedPreferences.edit();
+
+    }
+
+    sEditor.putBoolean(PREFS, firstTime);
+    sEditor.apply();
+
+  }
+
+  public boolean getFirstTime(Context context) {
+    if (sSharedPreferences == null) {
+      sSharedPreferences = context.getApplicationContext().getSharedPreferences(PREFS, Context.MODE_PRIVATE);
+    }
+    return sSharedPreferences.getBoolean(PREFS, true);
+  }
 
 
 }

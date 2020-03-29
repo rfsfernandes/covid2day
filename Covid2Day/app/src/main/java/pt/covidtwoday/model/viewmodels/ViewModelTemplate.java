@@ -3,7 +3,6 @@ package pt.covidtwoday.model.viewmodels;
 import android.app.Application;
 import android.content.Context;
 
-
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;

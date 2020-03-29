@@ -12,7 +12,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
-
 import android.widget.ProgressBar;
 
 import com.anychart.AnyChartView;
@@ -23,15 +22,13 @@ import com.google.android.material.tabs.TabLayout;
 
 import java.util.Objects;
 
-import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
-
 import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.lifecycle.ViewModelProviders;
-
 import androidx.viewpager.widget.ViewPager;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -40,7 +37,6 @@ import butterknife.Unbinder;
 import pt.covidtwoday.R;
 import pt.covidtwoday.custom.CovidTwoDayApp;
 import pt.covidtwoday.model.viewmodels.HistoryViewModel;
-
 import pt.covidtwoday.ui.activities.AdsRewardedActivity;
 import pt.covidtwoday.ui.fragments.history.adapter.HistoryPagerAdapter;
 

@@ -1,21 +1,17 @@
 package pt.covidtwoday.ui.activities;
 
+import android.content.res.Configuration;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.ProgressBar;
+
 import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.reward.RewardItem;
 import com.google.android.gms.ads.reward.RewardedVideoAd;
 import com.google.android.gms.ads.reward.RewardedVideoAdListener;
 
-import android.content.res.Configuration;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.widget.ProgressBar;
-import android.widget.Toast;
-
 import androidx.appcompat.app.AppCompatActivity;
-
 import pt.covidtwoday.R;
 import pt.covidtwoday.custom.CovidTwoDayApp;
 import pt.covidtwoday.custom.utils.UtilsClass;
