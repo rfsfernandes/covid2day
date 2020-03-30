@@ -1,0 +1,6 @@
+covidtwoday@gmail.com
+covidtwoday2020739182465
+
+covidtwoday-keyalias
+covidtwoday-keystore.jks
+pw: covidtwoday2020739182465

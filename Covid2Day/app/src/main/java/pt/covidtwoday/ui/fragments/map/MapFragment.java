@@ -109,7 +109,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback{
   @Override
   public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
-
+    behavior.setState(BottomSheetBehavior.STATE_HIDDEN);
   }
 
   @Override
@@ -117,13 +117,15 @@ public class MapFragment extends Fragment implements OnMapReadyCallback{
     super.onResume();
     mapView.onResume();
     behavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+    toShowWorld = false;
+
   }
 
   @Override
   public void onDestroy() {
     super.onDestroy();
     mapView.onDestroy();
-    mUnbinder.unbind();
+
   }
 
   @Override
@@ -153,8 +155,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback{
             CountryData countryData = new Gson().fromJson(marker.getSnippet(), CountryData.class);
             bundle.putString(COUNTRY_BUNDLE, countryData.getCountry());
 
+            if(getActivity() != null){
+              Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.action_navigation_map_to_navigation_live_data, bundle);
+            }
 
-            Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.action_navigation_map_to_navigation_live_data, bundle);
 
           }
         }
@@ -167,6 +171,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback{
 
   private void initViewModel() {
     mMapViewModel.countryDataLiveData.observe(Objects.requireNonNull(getActivity()), countryDataList -> {
+
       new Thread(() -> {
         for (CountryData countryData :
             countryDataList) {
@@ -200,6 +205,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback{
     mMapViewModel.worldLiveData.observe(getActivity(), worldInfo -> {
       if (toShowWorld) {
         showWorldInfo(worldInfo);
+        toShowWorld = false;
       }
 
     });
@@ -217,6 +223,17 @@ public class MapFragment extends Fragment implements OnMapReadyCallback{
   }
 
   private void showWorldInfo(WorldInfo worldInfo) {
+    if(textViewWorldCases != null || textViewWorldDeaths != null || textViewWorldActive != null
+        || textViewWorldRecovered != null || textViewUpdatedAt != null || behavior != null){
+      worldInfo(worldInfo);
+    }else{
+      mUnbinder = ButterKnife.bind(this, rootView);
+      worldInfo(worldInfo);
+    }
+    handleProgress(false);
+  }
+
+  private void worldInfo(WorldInfo worldInfo){
     textViewWorldCases.setText(String.valueOf(worldInfo.getCases()));
     textViewWorldDeaths.setText(String.valueOf(worldInfo.getDeaths()));
     textViewWorldActive.setText(String.valueOf(worldInfo.getActive()));
@@ -256,7 +273,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback{
   void getWorldInfo() {
     if (getActivity() != null) {
 
-
       if (behavior.getState() == BottomSheetBehavior.STATE_EXPANDED && behavior != null) {
         behavior.setState(BottomSheetBehavior.STATE_HIDDEN);
       } else {
@@ -266,6 +282,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback{
           startActivityForResult(new Intent(getActivity(), AdsRewardedActivity.class),
               REQUEST_CODE_ADS);
         } else {
+          toShowWorld = true;
           mMapViewModel.getWorldData();
         }
 
@@ -280,6 +297,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback{
     super.onActivityResult(requestCode, resultCode, data);
     if (requestCode == REQUEST_CODE_ADS) {
       if (resultCode == RESULT_OK) {
+        handleProgress(false);
         mMapViewModel.getWorldData();
       } else if (resultCode == RESULT_NO_ADS) {
         if (getContext() != null) {
@@ -287,8 +305,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback{
               .setTitle(getResources().getString(R.string.no_ads_title))
               .setMessage(getResources().getString(R.string.no_ads_message))
               .setPositiveButton(getResources().getString(R.string.ok), (dialogInterface, i) -> {
+                toShowWorld = true;
                 mMapViewModel.getWorldData();
                 dialogInterface.dismiss();
+                handleProgress(false);
               }).create().show();
         }
 
@@ -302,9 +322,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback{
                     REQUEST_CODE_ADS);
               })
               .setNegativeButton(getResources().getString(R.string.cancel), (dialogInterface, i) -> {
+                toShowWorld = true;
                 mApp.setTokenAmount(3);
                 mMapViewModel.getWorldData();
                 dialogInterface.dismiss();
+                handleProgress(false);
               }).create().show();
         }
 
