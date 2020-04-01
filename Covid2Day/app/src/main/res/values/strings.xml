@@ -66,5 +66,6 @@
   <string name="ad_closed">It looks like you closed the ad…</string>
   <string name="ad_closed_message">We\'re sorry. It looks that you closed the ad… This app needs     you tosupport it by watching some ads every now and then in order to run some services like     GoogleMaps! Can you help us please?</string>
   <string name="title_activity_ads_rewarded" translatable="false">AdsRewardedActivity</string>
+  <string name="data_history">Data History</string>
 
 </resources>

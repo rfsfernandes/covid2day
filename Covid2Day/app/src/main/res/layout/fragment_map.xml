@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_height="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent">
@@ -54,7 +53,7 @@
     <LinearLayout
         android:id="@+id/linearLayoutWorldData"
         android:layout_width="match_parent"
-        android:layout_height="56dp"
+        android:layout_height="@dimen/world_data_button_height"
         android:layout_gravity="top"
         android:layout_marginTop="5dp"
         android:background="@drawable/sheet_back_ground"
@@ -76,7 +75,7 @@
           android:fontFamily="@font/roboto_black"
           android:text="@string/world_data"
           android:textColor="@color/colorAccent"
-          android:textSize="18sp" />
+          android:textSize="@dimen/textfields_main" />
     </LinearLayout>
 
     <androidx.cardview.widget.CardView

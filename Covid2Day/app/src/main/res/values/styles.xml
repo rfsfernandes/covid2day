@@ -14,18 +14,24 @@
 
   <style name="sheet_text_left" parent="Widget.AppCompat.TextView">
 
-    <item name="android:textSize">13sp</item>
+    <item name="android:textSize">@dimen/left_text_view_font_size</item>
     <item name="android:fontFamily">@font/roboto_bold</item>
   </style>
 
   <style name="sheet_text_right" parent="Widget.AppCompat.TextView">
     <item name="android:textColor">@color/colorAccent</item>
-    <item name="android:textSize">14sp</item>
+    <item name="android:textSize">@dimen/right_text_view_font_size</item>
     <item name="android:fontFamily">@font/roboto_regular</item>
   </style>
 
   <style name="nav_style" parent="TextAppearance.AppCompat">
-    <item name="android:textSize">14sp</item>
+    <item name="android:textSize">@dimen/textinputs</item>
+  </style>
+
+  <style name="tabs">
+    <item name="android:textSize">@dimen/tab_text_size</item>
+    <item name="fontFamily">@font/roboto_regular</item>
+    <item name="textAllCaps">true</item>
   </style>
 
 </resources>

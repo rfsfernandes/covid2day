@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -27,10 +26,10 @@
           android:layout_marginTop="24dp"
           android:layout_marginEnd="16dp"
           android:fontFamily="@font/roboto_bold"
-          android:text="Data History"
+          android:text="@string/data_history"
           android:textAlignment="center"
           android:textColor="@color/colorAccent"
-          android:textSize="30sp"
+          android:textSize="@dimen/title_cardview_main"
           app:layout_constraintEnd_toEndOf="parent"
           app:layout_constraintStart_toStartOf="parent"
           app:layout_constraintTop_toTopOf="parent" />
@@ -47,7 +46,7 @@
           android:text="@string/country_field_history"
           android:textAlignment="center"
           android:textColor="@color/colorAccent"
-          android:textSize="18sp"
+          android:textSize="@dimen/textfields_main"
           app:layout_constraintBottom_toTopOf="@+id/autoCompleteTextView"
           app:layout_constraintEnd_toEndOf="@+id/textView"
           app:layout_constraintStart_toStartOf="@+id/textView"
@@ -56,7 +55,7 @@
       <AutoCompleteTextView
           android:id="@+id/autoCompleteTextView"
           android:layout_width="0dp"
-          android:layout_height="46dp"
+          android:layout_height="@dimen/inputs_height"
           android:layout_marginBottom="32dp"
           android:background="@drawable/inputbackground"
           android:hint="@string/start_typing_here"
@@ -65,7 +64,7 @@
           android:textColor="#FFFFFF"
           android:textColorHint="#ffffff"
           android:textCursorDrawable="@null"
-          android:textSize="14sp"
+          android:textSize="@dimen/textinputs"
           app:layout_constraintBottom_toBottomOf="parent"
           app:layout_constraintEnd_toEndOf="@+id/textView2"
           app:layout_constraintStart_toStartOf="@+id/textView2" />
@@ -146,9 +145,11 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/imageView2"
             app:tabGravity="center"
-            app:tabMode="auto">
+            app:tabMode="auto"
+            app:tabTextAppearance="@style/tabs">
 
           <com.google.android.material.tabs.TabItem
+              style="@style/tabs"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:text="@string/charts" />

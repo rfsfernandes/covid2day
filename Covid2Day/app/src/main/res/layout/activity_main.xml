@@ -8,8 +8,9 @@
   <com.google.android.material.bottomnavigation.BottomNavigationView
       android:id="@+id/nav_view"
       android:layout_width="0dp"
-      android:layout_height="wrap_content"
+      android:layout_height="@dimen/navbar_height"
       android:background="?android:attr/windowBackground"
+
       app:itemIconTint="@drawable/nav_selector"
       app:itemTextAppearanceActive="@style/nav_style"
       app:itemTextAppearanceInactive="@style/nav_style"
